@@ -5,7 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - master
 
 env:
   CI_PARAMS: -DGLFW_LIBRARY_TYPE=SHARED -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DCMAKE_BUILD_TYPE=Release

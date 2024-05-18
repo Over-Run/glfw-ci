@@ -32,7 +32,7 @@ jobs:
         with:
           fetch-depth: 3
       - name: Install dependencies
-        run: sudo apt-get install libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel libXext-devel libxkbcommon-devel wayland-devel
+        run: sudo apt-get install libwayland-dev libxkbcommon-dev xorg-dev
       - name: Configure build
         run: |
           source scl_source enable devtoolset-11 || true
@@ -41,12 +41,12 @@ jobs:
         run: |
           source scl_source enable devtoolset-11 || true
           cmake --build build --parallel
-          strip build/libglfw.so
+          strip build/src/libglfw.so
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux-${{matrix.ARCH}}
-          path: build/libglfw.so
+          path: build/src/libglfw.so
           if-no-files-found: error
 
   linux-cross:
@@ -120,12 +120,12 @@ jobs:
       - name: Build
         run: |
           cmake --build build --parallel
-          ${{matrix.TRIPLET}}-strip build/libglfw.so
+          ${{matrix.TRIPLET}}-strip build/src/libglfw.so
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: linux-${{matrix.ARCH}}
-          path: build/libglfw.so
+          path: build/src/libglfw.so
           if-no-files-found: error
 
   freebsd-cross:
@@ -150,12 +150,12 @@ jobs:
             sudo pkg install -y cmake gmake pkgconf libXrandr libXinerama libXcursor libXi libXext libxkbcommon wayland wayland-protocols libevdev evdev-proto
             cmake -B build $CI_PARAMS -DGLFW_BUILD_WAYLAND=ON -DCMAKE_C_FLAGS="-std=c99 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
             cmake --build build --parallel
-            strip build/libglfw.so
+            strip build/src/libglfw.so
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: freebsd-x64
-          path: build/libglfw.so
+          path: build/src/libglfw.so
           if-no-files-found: error
 
   macos:
@@ -178,12 +178,12 @@ jobs:
       - name: Build
         run: |
           cmake --build build --parallel
-          strip -u -r build/libglfw.dylib
+          strip -u -r build/src/libglfw.dylib
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{matrix.ARCH}}
-          path: build/libglfw.dylib
+          path: build/src/libglfw.dylib
           if-no-files-found: error
 
   windows:
@@ -212,5 +212,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{matrix.ARCH}}
-          path: build\Release\glfw.dll
+          path: build\src\Release\glfw.dll
           if-no-files-found: error
